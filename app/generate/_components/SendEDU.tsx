@@ -7,6 +7,8 @@ import { Input } from "@heroui/input"
 import { Button } from "@heroui/button"
 import ModalTransactionCustom from "@/components/modal/modal-transaction-custom"
 import { useEduBalance } from "@/hooks/query/useEduBalance"
+import { useEduBalanceAI } from "@/hooks/query/useEduBalanceAI"
+import { useAddressAI } from "@/hooks/query/useAddressAI"
 import { Loader } from "lucide-react"
 
 export default function SendEDU({ toAddress }: { toAddress: HexAddress }) {
@@ -14,6 +16,9 @@ export default function SendEDU({ toAddress }: { toAddress: HexAddress }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const { formatted, symbol } = useEduBalance()
+
+  const { addressAI } = useAddressAI()
+  const { formatted: aiFormatted } = useEduBalanceAI({ address: addressAI })
 
   const {
     data: txHash,
@@ -52,15 +57,27 @@ export default function SendEDU({ toAddress }: { toAddress: HexAddress }) {
 
   return (
     <div className="max-w-md w-full bg-white dark:bg-neutral-900 p-6 rounded-2xl shadow-md space-y-4">
-      <div>
-        <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-1">
-          Your balance
-        </p>
-        <p className="text-lg font-semibold">
-          {parseFloat((formatted || "0").toString()).toFixed(4)} {symbol}
-        </p>
+      <div className="flex flex-wrap justify-between">
+        <div>
+          <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-1">
+            Your Wallet Balance
+          </p>
+          <p className="text-lg font-semibold">
+            {parseFloat((formatted || "0").toString()).toFixed(4)} {symbol}
+          </p>
+        </div>
+
+        <div>
+          <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-1">
+            AI Wallet Balance
+          </p>
+          <p className="text-lg font-semibold">
+            {parseFloat((aiFormatted || "0").toString()).toFixed(4)} {symbol}
+          </p>
+        </div>
       </div>
 
+      {/* Input */}
       <div className="space-y-2">
         <Input
           type="number"
@@ -76,6 +93,7 @@ export default function SendEDU({ toAddress }: { toAddress: HexAddress }) {
         </p>
       </div>
 
+      {/* Button */}
       <Button
         onPress={handleSend}
         disabled={isDisabled}
@@ -86,7 +104,7 @@ export default function SendEDU({ toAddress }: { toAddress: HexAddress }) {
       >
         {isSending || isWaiting ? (
           <div className="flex items-center justify-center gap-2">
-            <Loader className="animate-spin"/>
+            <Loader className="animate-spin" />
             Sending...
           </div>
         ) : (
@@ -94,8 +112,27 @@ export default function SendEDU({ toAddress }: { toAddress: HexAddress }) {
         )}
       </Button>
 
-      <p className="text-sm text-neutral-300">Note: If you don&apos;t have any EDU Chain Testnet tokens, you can claim them from faucet <a href="https://educhain-community-faucet.vercel.app/" target="_blank" className="text-blue-500 hover:underline">Educhain Community Faucet</a> or <a href="https://www.hackquest.io/faucets/656476" target="_blank" className="text-blue-500 hover:underline">Hackquest Faucet</a>.</p>
+      {/* Faucet Note */}
+      <p className="text-sm text-neutral-300">
+        Note: If you don&apos;t have any EDU Chain Testnet tokens, you can claim them from faucet{" "}
+        <a
+          href="https://educhain-community-faucet.vercel.app/"
+          target="_blank"
+          className="text-blue-500 hover:underline"
+        >
+          Educhain Community Faucet
+        </a>{" "}
+        or{" "}
+        <a
+          href="https://www.hackquest.io/faucets/656476"
+          target="_blank"
+          className="text-blue-500 hover:underline"
+        >
+          Hackquest Faucet
+        </a>.
+      </p>
 
+      {/* Modal */}
       <ModalTransactionCustom
         isOpen={isModalOpen}
         setIsOpen={handleCloseModal}

@@ -29,7 +29,7 @@ import { Swaps } from "@/types/graphql/swaps";
 import { Transfers } from "@/types/graphql/transfers";
 import { Stakeds } from "@/types/graphql/stakeds";
 import { Withdraws } from "@/types/graphql/withdraws";
-import { urlSepoliaBasescan } from "@/lib/utils";
+import { urlExplorer } from "@/lib/utils";
 import { Link } from "@heroui/link";
 
 type HistoryType = "transfers" | "swaps" | "stakeds" | "withdraws";
@@ -113,7 +113,7 @@ export default function HistoryCard() {
           )}
         </Button>
         <Link
-          href={urlSepoliaBasescan({ 
+          href={urlExplorer({ 
             address: hash, 
             type: 'transaction' 
           })}

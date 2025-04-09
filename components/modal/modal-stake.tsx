@@ -85,7 +85,7 @@ const ModalStake = ({
               ))}
             </div>
 
-            <p>Goto page faucet if you dont have token by <Link href='/faucet'>click this</Link></p>
+            <p className='text-sm text-neutral-300'>Note: This is our deployed token on EduChain, not the native token. If you don’t have any tokens, please visit the faucet page by <Link href='/faucet' className='hover:underline'>clicking here</Link>.</p>
           </div>
         </ModalBody>
 

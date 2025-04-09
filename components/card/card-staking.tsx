@@ -4,7 +4,7 @@ import { Card } from '@heroui/card';
 import { ChartArea, DollarSign, ArrowDown, ArrowUp, ExternalLink, Clock, Calendar, Loader2 } from 'lucide-react';
 import { Tooltip } from '@heroui/tooltip';
 import { formatPercent, formatUSD, normalizeAPY } from '@/lib/helper';
-import { urlSepoliaBasescan } from '@/lib/utils';
+import { urlExplorer } from '@/lib/utils';
 import { StakingPosition } from '@/types/staking';
 import { Image } from '@heroui/image';
 import { Chip } from '@heroui/chip';
@@ -197,7 +197,7 @@ const CardStaking = ({ pool }: { pool: StakingPosition; sRefetch: () => void }) 
             <Button
               variant="flat"
               className="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700"
-              onPress={() => window.open(urlSepoliaBasescan({ address: pool.pool.addressStaking, type: "address" }), '_blank')}
+              onPress={() => window.open(urlExplorer({ address: pool.pool.addressStaking, type: "address" }), '_blank')}
             >
               <ExternalLink className="w-4 h-4" />
             </Button>

@@ -4,6 +4,7 @@ import apiAgent from "@/lib/api-agent";
 import useGenerateContent from "@/hooks/query/api/useGeneratedContent";
 import { useStaking } from "@/hooks/query/useStaking";
 import { useProjectIdentifier } from "./useProjectIdentifier";
+import { useAccount } from "wagmi";
 
 export const dataClassify = [
   {
@@ -30,6 +31,7 @@ interface StepStatus {
 
 export const useGenerateAI = () => {
   const { sData } = useStaking();
+  const { address } = useAccount();
   const { findProjectIdentifier } = useProjectIdentifier(sData);
 
   const { setRisk, setIdProtocol, idProtocolSaved, riskSaved } = useGenerateContent();
@@ -58,7 +60,7 @@ export const useGenerateAI = () => {
         ]);
 
         updateStepStatus(1, "loading");
-        const riskResponse = await apiAgent.post("generate-risk-profile", { data: formattedSubmission });
+        const riskResponse = await apiAgent.post("generate-risk-profile", { data: formattedSubmission, user_address: address });
 
         if (!riskResponse || !riskResponse.risk) {
           throw new Error("Invalid risk profile response");
@@ -76,7 +78,7 @@ export const useGenerateAI = () => {
         }
 
         updateStepStatus(2, "loading");
-        const protocolResponse = await apiAgent.post("generate-protocol", {
+        const protocolResponse = await apiAgent.post("query", {
           query: matchingClassification.prompt
         });
 

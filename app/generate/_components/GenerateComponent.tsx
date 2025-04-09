@@ -14,15 +14,14 @@ import { useEduBalanceAI } from "@/hooks/query/useEduBalanceAI";
 
 const GenerateComponent: React.FC = () => {
   const { riskSaved: risk, idProtocolSaved: protocolId } = useGenerateContent();
-
   const { isConnected } = useAccount();
   const { addressAI, laAI } = useAddressAI();
-
   const { formatted } = useEduBalanceAI({ address: addressAI });
 
-  if (laAI) {
-    return <Loading className="z-[90]" />;
-  }
+  const hasBalance = formatted !== undefined && Number(formatted) >= 0.01;
+  const noBalance = formatted !== undefined && Number(formatted) < 0.01;
+
+  if (laAI) return <Loading className="z-[90]" />;
 
   const timelineData = [
     {
@@ -49,15 +48,15 @@ const GenerateComponent: React.FC = () => {
         <p className="text-neutral-800 dark:text-neutral-200 text-sm md:text-lg font-normal mb-4">
           Connect your wallet to see the generated content.
         </p>
-      ) : addressAI ? (
+      ) : addressAI && hasBalance ? (
         <QuestionnaireContent />
-      ) : formatted !== undefined && Number(formatted) < 0.01 ? (
+      ) : noBalance ? (
         <p className="text-neutral-800 dark:text-neutral-200 text-sm md:text-lg font-normal mb-4">
-          You need to create a wallet AI first to automate the staking.
+          You need to transfer EDU Testnet tokens to your wallet AI first.
         </p>
       ) : (
         <p className="text-neutral-800 dark:text-neutral-200 text-sm md:text-lg font-normal mb-4">
-          You need to transfer EDU Testnet tokens to your wallet AI first.
+          You need to create a wallet AI first to automate the staking.
         </p>
       ),
     },
@@ -67,15 +66,15 @@ const GenerateComponent: React.FC = () => {
         <p className="text-neutral-800 dark:text-neutral-200 text-sm md:text-lg font-normal mb-4">
           Connect your wallet to see the generated content.
         </p>
-      ) : risk && protocolId ? (
+      ) : risk && protocolId && hasBalance ? (
         <GeneratedContent risk={risk} protocolId={protocolId} />
-      ) : formatted !== undefined && Number(formatted) < 0.01 ? (
+      ) : noBalance ? (
         <p className="text-neutral-800 dark:text-neutral-200 text-sm md:text-lg font-normal mb-4">
-          You need to fill the questionnaire first.
+          You need to transfer EDU Testnet tokens to your wallet AI first.
         </p>
       ) : (
         <p className="text-neutral-800 dark:text-neutral-200 text-sm md:text-lg font-normal mb-4">
-          You need to transfer EDU Testnet tokens to your wallet AI first.
+          You need to fill the questionnaire first.
         </p>
       ),
     },

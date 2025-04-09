@@ -17,7 +17,7 @@ import ModalTransactionCustom from "@/components/modal/modal-transaction-custom"
 import ModalStake from "@/components/modal/modal-stake";
 import { useProofHistory } from "@/hooks/query/graphql/useProof";
 import { Link } from "@heroui/link";
-import { urlSepoliaBasescan } from "@/lib/utils";
+import { urlExplorer } from "@/lib/utils";
 import { Skeleton } from "@heroui/skeleton";
 
 export default function GeneratedContent({
@@ -161,12 +161,12 @@ export default function GeneratedContent({
           {sLoading ? <Skeleton className="w-24 h-4" /> : truncateAddress(latestProof?.transactionHash)}
           </Snippet>
           <Link
-            href={urlSepoliaBasescan({ txHash: latestProof?.transactionHash, type: "transaction" })}
+            href={urlExplorer({ txHash: latestProof?.transactionHash, type: "transaction" })}
             isExternal
             color="warning"
             className="text-sm font-medium underline underline-offset-1"
           >
-            View on Basescan
+            View on Educhain Explorer
           </Link>
         </div>
       </div>

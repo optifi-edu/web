@@ -148,7 +148,7 @@ export default function CardPortfolio({
                         size="sm"
                         onPress={() =>
                           window.open(
-                            `https://basescan.org/address/${isAIWallet ? curAddressAI : curAddress}`,
+                            `https://edu-chain-testnet.blockscout.com/address/${isAIWallet ? curAddressAI : curAddress}`,
                             '_blank'
                           )
                         }

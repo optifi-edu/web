@@ -3,7 +3,7 @@ export const normalizeAPY = (apy: number) => {
 }
 
 export const truncateAddress = (address: string, startLength = 6, endLength = 4) => {
-    if (!address) return "No Account";
+    if (!address) return "Not Found";
     const regex = new RegExp(`^(0x[a-zA-Z0-9]{${startLength}})[a-zA-Z0-9]+([a-zA-Z0-9]{${endLength}})$`);
     const match = address.match(regex);
     if (!match) return address;

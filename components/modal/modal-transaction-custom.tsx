@@ -3,7 +3,7 @@ import { Modal, ModalBody, ModalContent, ModalHeader } from '@heroui/modal'
 import React from 'react'
 import { Snippet } from '@heroui/snippet'
 import Link from 'next/link';
-import { urlSepoliaBasescan } from '@/lib/utils';
+import { urlExplorer } from '@/lib/utils';
 
 export default function ModalTransactionCustom({
   isOpen,
@@ -43,12 +43,12 @@ export default function ModalTransactionCustom({
                   {data && data.length > 20 ? `${data.substring(0, 30)}...` : data}
                 </Snippet>
               <Link
-                href={urlSepoliaBasescan({ address: data && data, type: 'transaction'})}
+                href={urlExplorer({ address: data && data, type: 'transaction'})}
                 target='_blank'
                 rel='noopener noreferrer'
                 className='underline underline-offset-1 cursor-pointer text-sm text-center'
               >
-                view on basescan
+                view on educhain explorer
               </Link>
             </>
           )}
