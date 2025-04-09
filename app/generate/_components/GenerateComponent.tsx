@@ -35,7 +35,7 @@ const GenerateComponent: React.FC = () => {
         <p className="text-neutral-800 dark:text-neutral-200 text-sm md:text-lg font-normal mb-4">
           Connect your wallet to see the generated content.
         </p>
-      ) : !addressAI ? (
+      ) : addressAI ? (
         <TransferContent addressAI={addressAI} />
       ) : (
         <p className="text-neutral-800 dark:text-neutral-200 text-sm md:text-lg font-normal mb-4">
