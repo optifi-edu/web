@@ -51,7 +51,7 @@ const GenerateComponent: React.FC = () => {
         </p>
       ) : addressAI ? (
         <QuestionnaireContent />
-      ) : !formatted ? (
+      ) : formatted !== undefined && Number(formatted) < 0.01 ? (
         <p className="text-neutral-800 dark:text-neutral-200 text-sm md:text-lg font-normal mb-4">
           You need to create a wallet AI first to automate the staking.
         </p>
@@ -69,7 +69,7 @@ const GenerateComponent: React.FC = () => {
         </p>
       ) : risk && protocolId ? (
         <GeneratedContent risk={risk} protocolId={protocolId} />
-      ) : !formatted ? (
+      ) : formatted !== undefined && Number(formatted) < 0.01 ? (
         <p className="text-neutral-800 dark:text-neutral-200 text-sm md:text-lg font-normal mb-4">
           You need to fill the questionnaire first.
         </p>
