@@ -33,12 +33,10 @@ export const HomeComponent = () => {
           <Paragraph className="mt-6">
             optiFi is an AI-powered DeFi platform that automates crypto investments based on personalized risk profiles. Deployed on EduChain, it lifts TVL while allowing users to focus on learning, free from the hassle of active portfolio management.
           </Paragraph>
-          <div className="mt-5 w-full flex max-w-md mx-auto lg:mx-0">
-            <div className="flex sm:flex-row flex-col gap-5 w-full">
-              <Link href="/generate" className="z-0 group relative justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-6 min-w-24 h-12 text-medium rounded-large [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-warning text-warning-foreground data-[hover=true]:opacity-hover w-fit py-3 inline-flex">
-                Let&apos;s Go
-              </Link>
-            </div>
+          <div className="mt-5 flex flex-row gap-5 w-full justify-center lg:justify-start">
+            <Link href="/generate" className="z-0 group relative justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-6 min-w-24 h-12 text-medium rounded-large [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-warning text-warning-foreground data-[hover=true]:opacity-hover w-fit py-3 inline-flex">
+              Let&apos;s Go
+            </Link>
           </div>
         </div>
 

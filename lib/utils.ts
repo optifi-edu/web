@@ -6,5 +6,5 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function urlSepoliaBasescan({ address, txHash, type }: { address?: string, txHash?: string, type?: 'transaction' | 'address' }) {
-  return `https://pacific-explorer.sepolia-testnet.manta.network/${type === 'address' ? 'address' : 'tx'}/${address || txHash}`;
+  return `https://edu-chain-testnet.blockscout.com/${type === 'address' ? 'address' : 'tx'}/${address || txHash}`;
 }
