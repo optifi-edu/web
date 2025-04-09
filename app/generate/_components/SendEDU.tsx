@@ -94,6 +94,8 @@ export default function SendEDU({ toAddress }: { toAddress: HexAddress }) {
         )}
       </Button>
 
+      <p className="text-sm text-neutral-300">Note: If you don&apos;t have any EDU Chain Testnet tokens, you can claim them from faucet <a href="https://educhain-community-faucet.vercel.app/" target="_blank" className="text-blue-500 hover:underline">Educhain Community Faucet</a> or <a href="https://www.hackquest.io/faucets/656476" target="_blank" className="text-blue-500 hover:underline">Hackquest Faucet</a>.</p>
+
       <ModalTransactionCustom
         isOpen={isModalOpen}
         setIsOpen={handleCloseModal}
