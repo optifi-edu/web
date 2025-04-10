@@ -1,5 +1,5 @@
 import ModalTransactionCustom from "@/components/modal/modal-transaction-custom";
-import { useMint } from "@/hooks/mutation/useMint";
+import { useMintAI } from "@/hooks/mutation/api/useMintAI";
 import { cn } from "@/lib/utils";
 import { ListTokenResponse, TokenResponse } from "@/types/api/token.types";
 import { Button } from "@heroui/button";
@@ -52,11 +52,11 @@ const Feature = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const { mutation: mintMutation, txHash } = useMint();
+  const { mutation: mintMutation, result } = useMintAI();
 
   const handleMint = async () => {
     mintMutation.mutate({
-      addressToken: token.addressToken as HexAddress,
+      asset_id: token.name.toLowerCase(),
       amount: "1000"
     }, {
       onSuccess: () => {
@@ -101,7 +101,7 @@ const Feature = ({
         isOpen={isModalOpen}
         setIsOpen={closeModal}
         status={mintMutation.status || ""}
-        data={txHash || ""}
+        data={result?.txhash || ""}
         errorMessage={mintMutation.error?.message || undefined}
         name='mint'
       />
