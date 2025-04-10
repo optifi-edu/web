@@ -4,7 +4,7 @@ import {
   useSendTransaction,
   useWaitForTransactionReceipt
 } from "wagmi"
-import { parseEther, parseGwei } from "viem"
+import { parseEther } from "viem"
 import { useEffect, useState } from "react"
 import { Input } from "@heroui/input"
 import { Button } from "@heroui/button"
@@ -16,7 +16,7 @@ import { Loader } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export default function SendEDU({ toAddress }: { toAddress: `0x${string}` }) {
-  const [amount, setAmount] = useState("0.01")
+  const [amount, setAmount] = useState("0.05")
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const [maxBaseFee, setMaxBaseFee] = useState("0.012")
@@ -62,16 +62,9 @@ export default function SendEDU({ toAddress }: { toAddress: `0x${string}` }) {
   }, [txHash, isSuccessReceipt])
 
   const handleSend = () => {
-    const maxBaseFeeGwei = parseFloat(maxBaseFee) * 1e9;
-    const priorityFeeGwei = parseFloat(priorityFee) * 1e9;
-    const gasLimitBigInt = BigInt(gasLimit);
-
     sendTransaction({
       to: toAddress,
-      value: parseEther(amount),
-      gas: gasLimitBigInt,
-      maxFeePerGas: parseGwei(maxBaseFeeGwei.toString()),
-      maxPriorityFeePerGas: parseGwei(priorityFeeGwei.toString()),
+      value: parseEther(amount)
     })
   }
 
@@ -117,15 +110,15 @@ export default function SendEDU({ toAddress }: { toAddress: `0x${string}` }) {
       <div className="space-y-2">
         <Input
           type="number"
-          min="0.01"
-          step="0.01"
+          min="0.05"
+          step="0.05"
           placeholder="Enter amount to send"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           className="w-full"
         />
         <p className="text-xs text-neutral-500">
-          Minimum: 0.01 EDU. Recommended: 0.1 EDU.
+          Minimum: 0.05 EDU. Recommended: 0.1 EDU.
         </p>
       </div>
 

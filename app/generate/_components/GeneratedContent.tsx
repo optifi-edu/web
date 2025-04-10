@@ -29,7 +29,9 @@ export default function GeneratedContent({
   const [isModalTransactionOpen, setIsModalTransactionOpen] = useState<boolean>(false);
 
   const [curStaking, setCurStaking] = useState<Staking | null>(null);
-  const { bNormalized } = useAccountBalanceAI({ token: curStaking?.addressToken as HexAddress, decimal: DECIMALS_MOCK_TOKEN });
+  const { bNormalized, bNormal } = useAccountBalanceAI({ token: curStaking?.addressToken as HexAddress, decimal: DECIMALS_MOCK_TOKEN });
+
+  console.log(bNormal, "curStaking");
 
   useEffect(() => {
     if (!sData) return;

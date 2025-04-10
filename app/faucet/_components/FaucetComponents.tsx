@@ -22,21 +22,6 @@ export function FaucetComponent({
           buttonColor={"success"}
         />
       ))}
-      {/* <Feature
-        index={0}
-        token={token || {
-          id: 0,
-          name: '',
-          symbol: '',
-          addressToken: '',
-          chain: '',
-          decimals: 0,
-          logo: '',
-          priceChange24H: 0,
-          tags: [],
-        }}
-        buttonColor={"warning"}
-      /> */}
     </div>
   );
 }
@@ -56,7 +41,7 @@ const Feature = ({
 
   const handleMint = async () => {
     mintMutation.mutate({
-      asset_id: token.name.toLowerCase(),
+      asset_id: token.symbol.toLowerCase(),
       amount: "1000"
     }, {
       onSuccess: () => {
