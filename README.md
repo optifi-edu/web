@@ -57,21 +57,13 @@ OptiFi dynamically rebalances portfolios using **real-time market data**, ensuri
 
 This ensures that portfolios are always **optimized for maximum yield** while aligning with financial goals.
 
----
-
-## ⚙️ Hackathon Implementation Notes
-- 🔐 **Agent Wallet Keys:** Stored on a local **VPS server** (pending OPSEC implementation).
-- 🪙 **Mock Tokens:** Used to simulate transactions and interactions within the platform.
-
----
-
 ## 📜 License
 This project is licensed under the MIT License.
 
 ---
 
 ## ✅ Website URL
-🌐 Website: [https://originx.vercel.app/](https://opti-finance.vercel.app/)  
+🌐 Website: [https://optifi.vercel.app/](https://optifi.vercel.app/)  
 
 ---
 
