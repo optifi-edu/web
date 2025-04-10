@@ -1,7 +1,10 @@
 "use client"
 
-import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi"
-import { parseEther } from "viem"
+import {
+  useSendTransaction,
+  useWaitForTransactionReceipt
+} from "wagmi"
+import { parseEther, parseGwei } from "viem"
 import { useEffect, useState } from "react"
 import { Input } from "@heroui/input"
 import { Button } from "@heroui/button"
@@ -10,13 +13,18 @@ import { useEduBalance } from "@/hooks/query/useEduBalance"
 import { useEduBalanceAI } from "@/hooks/query/useEduBalanceAI"
 import { useAddressAI } from "@/hooks/query/useAddressAI"
 import { Loader } from "lucide-react"
+import { cn } from "@/lib/utils"
 
-export default function SendEDU({ toAddress }: { toAddress: HexAddress }) {
+export default function SendEDU({ toAddress }: { toAddress: `0x${string}` }) {
   const [amount, setAmount] = useState("0.01")
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const { formatted, symbol } = useEduBalance()
+  const [maxBaseFee, setMaxBaseFee] = useState("0.012")
+  const [priorityFee, setPriorityFee] = useState("1.5")
+  const [gasLimit, setGasLimit] = useState("6885602")
+  const [totalGasFee, setTotalGasFee] = useState<string | null>(null)
 
+  const { formatted, symbol } = useEduBalance()
   const { addressAI } = useAddressAI()
   const { formatted: aiFormatted } = useEduBalanceAI({ address: addressAI })
 
@@ -36,15 +44,34 @@ export default function SendEDU({ toAddress }: { toAddress: HexAddress }) {
   })
 
   useEffect(() => {
+    const base = parseFloat(maxBaseFee)
+    const priority = parseFloat(priorityFee)
+    const limit = parseFloat(gasLimit)
+
+    if (!isNaN(base) && !isNaN(priority) && !isNaN(limit)) {
+      const fee = (base + priority) * limit
+      const feeInEdu = fee * 1e-9
+      setTotalGasFee(feeInEdu.toFixed(9))
+    }
+  }, [maxBaseFee, priorityFee, gasLimit])
+
+  useEffect(() => {
     if (txHash && isSuccessReceipt) {
       setIsModalOpen(true)
     }
   }, [txHash, isSuccessReceipt])
 
   const handleSend = () => {
+    const maxBaseFeeGwei = parseFloat(maxBaseFee) * 1e9;
+    const priorityFeeGwei = parseFloat(priorityFee) * 1e9;
+    const gasLimitBigInt = BigInt(gasLimit);
+
     sendTransaction({
       to: toAddress,
       value: parseEther(amount),
+      gas: gasLimitBigInt,
+      maxFeePerGas: parseGwei(maxBaseFeeGwei.toString()),
+      maxPriorityFeePerGas: parseGwei(priorityFeeGwei.toString()),
     })
   }
 
@@ -52,11 +79,21 @@ export default function SendEDU({ toAddress }: { toAddress: HexAddress }) {
     setIsModalOpen(false)
   }
 
+  const totalAmount = parseFloat(amount || "0")
+  const gasFee = parseFloat(totalGasFee || "0")
+  const totalSpend = totalAmount + gasFee
+  const userBalance = parseFloat(formatted || "0")
+
   const isDisabled =
-    isSending || !toAddress || !amount || parseFloat(amount) < 0.01
+    isSending ||
+    !toAddress ||
+    !amount ||
+    totalAmount < 0.01 ||
+    isNaN(totalSpend) ||
+    userBalance < totalSpend
 
   return (
-    <div className="max-w-md w-full bg-white dark:bg-neutral-900 p-6 rounded-2xl shadow-md space-y-4">
+    <div className="max-w-md w-full bg-white dark:bg-neutral-900 p-6 rounded-2xl shadow-md space-y-6">
       <div className="flex flex-wrap justify-between">
         <div>
           <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-1">
@@ -77,7 +114,6 @@ export default function SendEDU({ toAddress }: { toAddress: HexAddress }) {
         </div>
       </div>
 
-      {/* Input */}
       <div className="space-y-2">
         <Input
           type="number"
@@ -93,14 +129,76 @@ export default function SendEDU({ toAddress }: { toAddress: HexAddress }) {
         </p>
       </div>
 
-      {/* Button */}
+      <div className="border rounded-xl p-4 space-y-4 bg-neutral-100 dark:bg-neutral-800">
+        <p className="font-semibold text-sm text-neutral-800 dark:text-white flex items-center gap-1">
+          Network Fee (Gas Fee)
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="text-sm text-neutral-700 dark:text-neutral-300 mb-1 block">
+              Max Base Fee (EDU)
+            </label>
+            <Input
+              type="number"
+              step="0.000001"
+              placeholder="0.012"
+              value={maxBaseFee}
+              disabled
+              onChange={(e) => setMaxBaseFee(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label className="text-sm text-neutral-700 dark:text-neutral-300 mb-1 block">
+              Priority Fee (EDU)
+            </label>
+            <Input
+              type="number"
+              step="0.000001"
+              placeholder="1.5"
+              value={priorityFee}
+              disabled
+              onChange={(e) => setPriorityFee(e.target.value)}
+            />
+          </div>
+
+          <div className="sm:col-span-2">
+            <label className="text-sm text-neutral-700 dark:text-neutral-300 mb-1 block">
+              Gas Limit
+            </label>
+            <Input
+              type="number"
+              step="1"
+              placeholder="6885602"
+              value={gasLimit}
+              disabled
+              onChange={(e) => setGasLimit(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="text-sm text-neutral-600 dark:text-neutral-300">
+          Estimated gas fee:{" "}
+          <span className="font-semibold text-orange-500 dark:text-orange-400">
+            {parseFloat(totalGasFee || "0.00").toFixed(4) || "0.000000"} EDU
+          </span>{" "}
+          <span className="text-neutral-400">(≈ $0.00)</span>
+        </div>
+
+        <p className="text-xs text-neutral-400 dark:text-neutral-500 leading-relaxed">
+          Note: This only estimates the gas fee. The actual fee may vary based on network conditions.
+        </p>
+      </div>
+
+
       <Button
         onPress={handleSend}
         disabled={isDisabled}
         type="button"
         variant="solid"
         color="warning"
-        className="w-full transition-colors"
+        className={cn("w-full transition-colors", isDisabled && "opacity-50 hover:bg-yellow-500/70 cursor-not-allowed")}
       >
         {isSending || isWaiting ? (
           <div className="flex items-center justify-center gap-2">
@@ -112,7 +210,6 @@ export default function SendEDU({ toAddress }: { toAddress: HexAddress }) {
         )}
       </Button>
 
-      {/* Faucet Note */}
       <p className="text-sm text-neutral-300">
         Note: If you don&apos;t have any EDU Chain Testnet tokens, you can claim them from faucet{" "}
         <a
@@ -132,7 +229,6 @@ export default function SendEDU({ toAddress }: { toAddress: HexAddress }) {
         </a>.
       </p>
 
-      {/* Modal */}
       <ModalTransactionCustom
         isOpen={isModalOpen}
         setIsOpen={handleCloseModal}
